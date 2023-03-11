@@ -31,7 +31,8 @@ public class ProjectsApp {
 		
 //		 Add a private instance variable named "operations". The type is List<String>. Initialize it using List
 		private List<String> operations = List.of(			
-				"1) Add a project"
+				"1) Add a project ",
+				"2) List projects "
 				);
 		// @formatter:on
 		
@@ -69,6 +70,9 @@ int selection = getUserSelection();
 					case 1: 
 						createProject();
 						break; 
+					case 2:
+						createProject();
+						break;
 //Back in the method processUserSelections():
 //Add a switch statement below the method call to getUserSelection(). Create a switch statement to switch on the value in the local variable selection.
 
@@ -129,6 +133,74 @@ int selection = getUserSelection();
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	 
+//create a variable to hold List of Projects named projects.
+	 //List<project> projects
+	 
+//Assign the variable the results of a method call to projectService.fetcuALLProjects().
+	 // List<project> projects = projectService.fetchAllProjects();
+	
+	
+	
+	
+	
+	
+// methoth list projects. It should take no parameters and should return nothing.
+//	private void listProjects() {
+	
+	
+	 private void listProjects() {
+		 List<Project> projects = projectService.fetchAllProjects();
+		 
+//		Print "\nProjects:" (without quotes) to the console
+		//		Sysout(\nProjects:");		 
+		 System.out.println("\nProjects: ") ;
+		 
+		 
+// 		for each projects 	
+		 
+		 projects.forEach(project -> System.out.println(" " + project.getProjectId() + " : " 
+				 + project.getProjectName())) ;
+	 
+
+}
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
 	private boolean exitMenu() {
 System.out.println("\nExiting the menu."); 
 		return true;
@@ -240,7 +312,10 @@ private void createProject() {
 	
 // Assign a String variable named input to the results of a method call to scanner.nextLine().	
 	
-	
+////////////////////////////////////////////////////////////////////////////////////////////////	
+//Making a new drop meanu with more options
+					
+					
 	
 	
 	
