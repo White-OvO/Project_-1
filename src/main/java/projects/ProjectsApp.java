@@ -23,8 +23,8 @@ public class ProjectsApp {
 		//DbConnection.getConnection();
 		
 	private ProjectService projectService = new ProjectService();
+	private Project curProject;
 
-		
 		
 ///	 To prevent the Eclipse formatter from reformatting the list, surround the variable declaration with // @formatter:off and // @formatter:on so
 		//@formatter:off
@@ -32,7 +32,8 @@ public class ProjectsApp {
 //		 Add a private instance variable named "operations". The type is List<String>. Initialize it using List
 		private List<String> operations = List.of(			
 				"1) Add a project ",
-				"2) List projects "
+				"2) List projects ",
+				"3) Select a project"
 				);
 		// @formatter:on
 		
@@ -73,6 +74,10 @@ int selection = getUserSelection();
 					case 2:
 						createProject();
 						break;
+					case 3:
+			            createProject();
+			            break;
+
 //Back in the method processUserSelections():
 //Add a switch statement below the method call to getUserSelection(). Create a switch statement to switch on the value in the local variable selection.
 
@@ -133,24 +138,25 @@ int selection = getUserSelection();
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	 
+//	In this step you will create the method, selectProject(). This method will list the project 
+//	IDs and names so that the user can select a project ID. Once the ID is entered, the service is called to return the project details	
+/**
+	 * This method allows the user to select a "current" project. The current project is one on which
+	 * you can add materials, steps, and categories.
+*/
+	  private void selectProject() {
+	    listProjects();
+	    Integer projectId = getIntInput("Enter a project ID to select a project");
+	    curProject = null;
+	    /* This will throw an exception if an invalid project ID is entered. */
+	    curProject = projectService.fetchProjectById(projectId);
+	  }
+
+	  /**
+	   * This method calls the project service to retrieve a list of projects from the projects table.
+	   * It then uses a Lambda expression to print the project IDs and names on the console. 
+	   */	
+ 
 //create a variable to hold List of Projects named projects.
 	 //List<project> projects
 	 
@@ -181,24 +187,7 @@ int selection = getUserSelection();
 	 
 
 }
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
+
 	 
 	 
 	private boolean exitMenu() {
