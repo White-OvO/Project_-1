@@ -12,7 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-
 import jdk.jfr.Category;
 import projects.exception.DbException;
 import projects.entity.Material;
@@ -21,6 +20,10 @@ import projects.entity.Project;
 //              a constant is specified using static final
 import projects.entity.Step;
 
+
+
+
+@SuppressWarnings("restriction")
 public class ProjectDao extends DaoBase {
   private static final String CATEGORY_TABLE = "category";
   private static final String MATERIAL_TABLE = "material";
@@ -38,7 +41,6 @@ public class ProjectDao extends DaoBase {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Create a method fetchAllProjects in projectDao. This method will simply return the results of the method call to the DAO 
 //class. The service class in out small application does not do very much. But it allows us to properly separate concerns of input/output, business logic, and database reads and writes. If you always structure your code like this it will be much easier to understand and make changes if needed
-// recieving steps and categories		  
   
 
 	
@@ -110,16 +112,17 @@ try (Connection conn = DbConnection.getConnection()) {
 				return projects;
 		}
 
-} 			catch (Exception e) 	{
+			} 			
+				catch (Exception e) 	{
 				rollbackTransaction(conn);
-				throw new DbException(e);
-}
-}
-	catch (SQLException e) {
-		throw new DbException(e);
+					throw new DbException(e);
+						}
+							}
+					catch (SQLException e) {
+						throw new DbException(e);
 				
-		  }		  
-}
+						}		  
+		  			}
 
 		  
 
@@ -141,8 +144,7 @@ try (Connection conn = DbConnection.getConnection()) {
 								}
 							}
 						}
-						
-						if(Objects.nonNull(project)) {
+						if (Objects.nonNull(project)) {
 							project.getMaterials().addAll(fetchMaterialsForProject(conn, projectId));
 							project.getSteps().addAll(fetchStepsForProject(conn, projectId));
 							project.getCategories().addAll(fetchCategoriesForProject(conn, projectId));
@@ -162,7 +164,7 @@ try (Connection conn = DbConnection.getConnection()) {
 			}
 
 
-			private List<Category> fetchCategoriesForProject(Connection conn, Integer projectId) {
+private List<Category> fetchCategoriesForProject(Connection conn, Integer projectId) {
 				String sql = ""
 						+ "SELECT c.* FROM " + CATEGORY_TABLE + " c "
 						+ "JOIN " + PROJECT_CATEGORY_TABLE + " pc USING (category_id) "
