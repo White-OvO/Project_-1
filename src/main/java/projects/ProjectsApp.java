@@ -33,7 +33,8 @@ public class ProjectsApp {
 		private List<String> operations = List.of(			
 				"1) Add a project ",
 				"2) List projects ",
-				"3) Select a project"
+				"3) Select a project",
+				"4) Update project details"
 				);
 		// @formatter:on
 		
@@ -69,13 +70,13 @@ int selection = getUserSelection();
 						done = exitMenu();
 						break; 
 					case 1: 
-						createProject();
+			            createProject();
 						break; 
 					case 2:
-						createProject();
+			            listProjects();
 						break;
 					case 3:
-			            createProject();
+			            selectProject();
 			            break;
 
 //Back in the method processUserSelections():
