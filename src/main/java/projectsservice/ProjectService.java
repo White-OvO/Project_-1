@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 
 import projects.dao.ProjectDao;
 import projects.entity.Project;
+import projects.exception.DbException;
 /**
  * This class implements the service the 3-tier application, CRUD operations as a pass-through from the input
  * layer to the data layer.
@@ -49,6 +50,15 @@ public class ProjectService {
 
 	}
 
+	 public void modifyProjectDetails(Project project) {
+			if(!projectDao.modifyProjectDetails(project)) { 
+				throw new DbException("Project with ID=" + project.getProjectId() + " does not exist."); 
 		
 	}
+}
+	}
+
+
+		
+	
 

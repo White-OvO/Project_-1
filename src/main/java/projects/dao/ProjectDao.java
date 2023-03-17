@@ -227,6 +227,11 @@ private List<Material> fetchMaterialsForProject(Connection conn, Integer project
 	}
 }
 
+public boolean modifyProjectDetails(Project project) {
+	// TODO Auto-generated method stub
+	return false;
+}
+
 }
 
 

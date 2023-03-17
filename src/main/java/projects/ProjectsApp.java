@@ -79,8 +79,13 @@ int selection = getUserSelection();
 			            selectProject();
 			            break;
 
-//Back in the method processUserSelections():
-//Add a switch statement below the method call to getUserSelection(). Create a switch statement to switch on the value in the local variable selection.
+					case 4:
+						updateProjectDetails();
+						break;
+						
+
+//			Back in the method processUserSelections():
+//			Add a switch statement below the method call to getUserSelection(). Create a switch statement to switch on the value in the local variable selection.
 
 					default:
 						System.out.println("\n"+ selection + " is not a valid selection. Try again.");
@@ -96,7 +101,24 @@ int selection = getUserSelection();
 			}
 		}
 	}
+//				In method updateProjectDetails():
+//				Check to see if curProject is null. If so, print a message "\nPlease select a project." and return from the method.
 
+private void updateProjectDetails() {
+	 String projectName = getStringInput("Enter the project name [" + curProject.getProjectName() + "]");
+	 
+	
+
+//			Create a new Project object. If the user input for a value is not null, add the value to the Project object.
+//			If the value is null, add the value from curProject. Repeat for all Project variables
+	Project project = new Project(); 
+	project.setProjectName(Objects.isNull(projectName) ? curProject.getProjectName() : projectName);
+	
+//			Create a new Project object. If the user input for a value is not null, add the value to the Project object. 
+//			If the value is null, add the value from curProject. Repeat for all Project variables	
+	 projectService.modifyProjectDetails(project); 
+		  curProject = projectService.fetchProjectById(curProject.getProjectId()); 
+}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 //METHODS NOTES:																																													 ////
 //a bunch of code in one line																																									     ////
