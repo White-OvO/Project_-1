@@ -34,7 +34,8 @@ public class ProjectsApp {
 				"1) Add a project ",
 				"2) List projects ",
 				"3) Select a project",
-				"4) Update project details"
+				"4) Update project details",
+			    "5) Delete a Project"
 				);
 		// @formatter:on
 		
@@ -82,7 +83,10 @@ int selection = getUserSelection();
 					case 4:
 						updateProjectDetails();
 						break;
-						
+
+					case 5:
+						deleteProject();
+						break;	
 
 //			Back in the method processUserSelections():
 //			Add a switch statement below the method call to getUserSelection(). Create a switch statement to switch on the value in the local variable selection.
@@ -101,24 +105,95 @@ int selection = getUserSelection();
 			}
 		}
 	}
+	
+	private void deleteProject() {
+		listProjects();
+
+		
+		Integer projectId = getIntInput("Enter the ID of the project to delete");
+			projectService.deleteProject(projectId);
+			System.out.println("Project " + projectId + " was deleted successfully.");
+
+		if (Objects.nonNull(curProject) && curProject.getProjectId().equals(projectId)) {
+			curProject = null;
+
+			}
+		}
+	
+
+	 
+	
+	
+	
 //				In method updateProjectDetails():
 //				Check to see if curProject is null. If so, print a message "\nPlease select a project." and return from the method.
 
 private void updateProjectDetails() {
-	 String projectName = getStringInput("Enter the project name [" + curProject.getProjectName() + "]");
-	 
-	
+	  if(Objects.isNull(curProject)) {
+	      System.out.println("\nPlease select a project.");
+	      return;
+	    	
+	  }
+	String projectName = getStringInput("Enter the project name [" + curProject.getProjectName() + "]");
+		  
+		  BigDecimal estimatedHours = getDecimalInput("Enter the estimated hours [" + curProject.getEstimatedHours() + "]"); 
+		  
+		  BigDecimal actualHours = getDecimalInput("Enter actual hours [" + curProject.getActualHours() + "]"); 
+		  
+		  Integer difficulty = getIntInput("Enter the project difficulty (1-5) [" + curProject.getDifficulty() + "]"); 
+		  
+		  String notes = getStringInput("Enter the project notes [" + curProject.getNotes() + "]"); 
+		  
 
 //			Create a new Project object. If the user input for a value is not null, add the value to the Project object.
 //			If the value is null, add the value from curProject. Repeat for all Project variables
-	Project project = new Project(); 
-	project.setProjectName(Objects.isNull(projectName) ? curProject.getProjectName() : projectName);
+	Project project = new Project(); 	  
+	 
+	  project.setProjectId(curProject.getProjectId()); 
+	 
+	  project.setProjectName(Objects.isNull(projectName) ? curProject.getProjectName() : projectName);
+
+	  		project.setEstimatedHours(Objects.isNull(estimatedHours) ? curProject.getEstimatedHours() : estimatedHours); 
+	   
+			  project.setActualHours(Objects.isNull(actualHours) ? curProject.getActualHours() : actualHours); 
+			  project.setDifficulty(Objects.isNull(difficulty) ? curProject.getDifficulty() : difficulty); 
+			  project.setNotes(Objects.isNull(notes) ? curProject.getNotes() : notes); 
+			 
+	  projectService.modifyProjectDetails(project); 
+	  curProject = projectService.fetchProjectById(curProject.getProjectId()); 	  
+		  
+		  
+		  
+	 
+	 
+	
+
 	
 //			Create a new Project object. If the user input for a value is not null, add the value to the Project object. 
 //			If the value is null, add the value from curProject. Repeat for all Project variables	
 	 projectService.modifyProjectDetails(project); 
 		  curProject = projectService.fetchProjectById(curProject.getProjectId()); 
 }
+
+
+
+
+
+private Object setEstimatedHours(Object object) {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+/**
+ * This method allows the user to select a "current" project. The current
+ * project is one on which you can add materials, steps, and categories.
+ */
+
+
+
+
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 //METHODS NOTES:																																													 ////
 //a bunch of code in one line																																									     ////
@@ -168,6 +243,12 @@ private void updateProjectDetails() {
 	 * you can add materials, steps, and categories.
 */
 	  private void selectProject() {
+		  if (Objects.isNull(curProject)) {
+				System.out.println("\nYou are not working with a project.");
+			} else {
+				System.out.println("\nYou are working with project: " + curProject);
+			}
+
 	    listProjects();
 	    Integer projectId = getIntInput("Enter a project ID to select a project");
 	    curProject = null;

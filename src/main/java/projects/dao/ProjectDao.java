@@ -70,8 +70,10 @@ public class ProjectDao extends DaoBase {
 			        setParameter(stmt, 3, project.getActualHours(), BigDecimal.class);
 			        setParameter(stmt, 4, project.getDifficulty(), Integer.class);
 			        setParameter(stmt, 5, project.getNotes(), String.class);
+
 			        
-			        stmt.executeUpdate();
+			//boolean updated = stmt.executeUpdate() == 1;
+	        stmt.executeUpdate();
 			        
 			        Integer projectId = getLastInsertId(conn, PROJECT_TABLE);
 			        commitTransaction(conn);
@@ -100,6 +102,7 @@ public class ProjectDao extends DaoBase {
 try (Connection conn = DbConnection.getConnection()) {
 	startTransaction(conn); // starts to get connection with this line
 	try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+		
 		try (ResultSet rs = stmt.executeQuery()) { //at this point there should be no errrors
 			List<Project> projects = new LinkedList<>(); //go through our result set
 
@@ -165,7 +168,7 @@ try (Connection conn = DbConnection.getConnection()) {
 			}
 
 
-private List<Category> fetchCategoriesForProject(Connection conn, Integer projectId) {
+private List<Category> fetchCategoriesForProject(Connection conn, Integer projectId) throws SQLException { 
 				String sql = ""
 						+ "SELECT c.* FROM " + CATEGORY_TABLE + " c "
 						+ "JOIN " + PROJECT_CATEGORY_TABLE + " pc USING (category_id) "
@@ -182,11 +185,12 @@ private List<Category> fetchCategoriesForProject(Connection conn, Integer projec
 						}
 						return categories;
 					}
-				}
+				
 				catch(SQLException e) {
 					throw new DbException(e);
 				}
 			}
+}
 
 private List<Step> fetchStepsForProject(Connection conn, Integer projectId) throws SQLException {
 	String sql =  "SELECT * FROM " + STEP_TABLE + " WHERE project_id = ?";
@@ -226,19 +230,76 @@ private List<Material> fetchMaterialsForProject(Connection conn, Integer project
 		}
 	}
 }
-
+//rite the SQL statement to modify the project details. Do not update the project ID – it should be part of the WHERE clause. Remember to use question marks as parameter placeholders.
 public boolean modifyProjectDetails(Project project) {
-	// TODO Auto-generated method stub
-	return false;
+	String sql = ""
+			+ "UPDATE " + PROJECT_TABLE + " SET "
+			+ "project_name = ?, "
+			+ "estimated_hours = ?, "
+			+ "actual_hours = ?, "
+			+ "difficulty = ?, "
+			+ "notes = ? "
+			+ "WHERE project_id = ?;";
+	// @formatter:on
+  
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	
+	
+	
+	try (Connection conn = DbConnection.getConnection()) {
+		startTransaction(conn);
+
+		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+			setParameter(stmt, 1, project.getProjectName(), String.class);
+			setParameter(stmt, 2, project.getEstimatedHours(), BigDecimal.class);
+			setParameter(stmt, 3, project.getActualHours(), BigDecimal.class);
+			setParameter(stmt, 4, project.getDifficulty(), Integer.class);
+			setParameter(stmt, 5, project.getNotes(), String.class);
+			setParameter(stmt, 6, project.getProjectId(), Integer.class);
+
+			boolean updated = stmt.executeUpdate() == 1;
+
+			commitTransaction(conn);
+			return updated;
+			} 
+		catch (Exception e) {
+			rollbackTransaction(conn);
+			throw new DbException(e);
+		}
+	}
+	 catch (SQLException e) {
+		throw new DbException(e);
+	}
 }
-
-}
-
-
-
+	
+	
+	
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Obtain the Connection and PreparedStatement using the appropr iate try-with-resource and catch blocks. Start and rollback a transaction as usual. Throw a DbException from each catch block.
 //In here you will write the methods that will return materials, steps, and categories as Lists
+	public boolean deleteProject(Integer projectId) {
+		String sql = "DELETE FROM " + PROJECT_TABLE + " WHERE project_id = ?";
+
+		try (Connection conn = DbConnection.getConnection()) {
+			startTransaction(conn);
+
+			try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+				setParameter(stmt, 1, projectId, Integer.class);
+
+				boolean deleted = stmt.executeUpdate() == 1;
+
+				commitTransaction(conn);
+				return deleted;
 				
-
-
+			} catch (Exception e) {
+				rollbackTransaction(conn);
+				throw new DbException(e);
+			}
+		} catch (SQLException e) {
+			throw new DbException(e);
+		}
+	}
+}
 
 
