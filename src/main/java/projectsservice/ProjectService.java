@@ -2,6 +2,7 @@ package projectsservice;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import projects.dao.ProjectDao;
 import projects.entity.Project;
@@ -25,8 +26,12 @@ import projects.exception.DbException;
 //Have Eclipse create the method fetchAllProjects() in the ProjectService class, or create it yourself.
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 public List<Project> fetchAllProjects() {
-		return projectDao.fetchAllProjects() ;
-		
+	//@formatter:off	
+	return projectDao.fetchAllProjects() 
+		.stream()
+		.sorted((r1,r2) -> r1.getProjectId() - r2.getProjectId())
+		.collect(Collectors.toList());
+		//@formatter on:
 	}
 //				This method fetches project details from the project Dao .  
 //				calling service returning projects DAO / can also throw a new such element exception	
